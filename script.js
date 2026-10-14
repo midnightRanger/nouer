@@ -152,55 +152,76 @@ const renderGrid = () => {
     : '<p class="empty">Пока нет активностей. Создайте первую.</p>';
 };
 
-document.addEventListener('click', e => {
-    const link = e.target.closest('a[href^="collab.html?id="]');
-    if (!link) return;
+document.addEventListener("click", (e) => {
+  const link = e.target.closest('a[href^="collab.html?id="]');
+  if (!link) return;
 
-    const url = new URL(link.href, location.origin);
-    const activityId = url.searchParams.get('id');
+  const url = new URL(link.href, location.origin);
+  const activityId = url.searchParams.get("id");
 
-    console.log('[Top100] Клик по "Посмотреть", activity_id:', activityId);
+  console.log('[Top100] Клик по "Посмотреть", activity_id:', activityId);
 
-    (window._top100q = window._top100q || []).push(function() {
-        if (window.top100Counter && window.top100Counter.trackEvent) {
-            window.top100Counter.trackEvent('view_activity', {
-                activity_id: activityId
-            });
-            console.log('[Top100] Событие "view_activity" отправлено:', activityId);
-        } else {
-            console.warn('[Top100] top100Counter не готов, событие не отправлено');
-        }
-    });
+  (window._top100q = window._top100q || []).push(function () {
+    if (window.top100Counter && window.top100Counter.trackEvent) {
+      window.top100Counter.trackEvent("view_activity", {
+        activity_id: activityId,
+      });
+      console.log('[Top100] Событие "view_activity" отправлено:', activityId);
+    } else {
+      console.warn("[Top100] top100Counter не готов, событие не отправлено");
+    }
+  });
 });
 
 document.addEventListener("click", (e) => {
-    const b = e.target.closest("[data-apply]");
-    if (!b) return;
+  const b = e.target.closest("[data-apply]");
+  if (!b) return;
 
-    const activityId = b.dataset.apply;
-    const isAuthorized = !!me();
+  const activityId = b.dataset.apply;
+  const isAuthorized = !!me();
 
-    console.log('[Top100] Клик по "Подать заявку", activity_id:', activityId, '| authorized:', isAuthorized);
+  console.log(
+    '[Top100] Клик по "Подать заявку", activity_id:',
+    activityId,
+    "| authorized:",
+    isAuthorized,
+  );
 
-    (window._top100q = window._top100q || []).push(function() {
-        if (window.top100Counter && window.top100Counter.trackEvent) {
-            window.top100Counter.trackEvent("click_apply_button", {
-                activity_id: activityId,
-                authorized: isAuthorized,
-            });
-            console.log('[Top100] Событие "click_apply_button" отправлено:', activityId, '| authorized:', isAuthorized);
-        } else {
-            console.warn('[Top100] top100Counter не готов, событие не отправлено');
-        }
-    });
-
-    if (!isAuthorized) {
-        location.href = "login.html";
-        return;
+  (window._top100q = window._top100q || []).push(function () {
+    if (window.top100Counter && window.top100Counter.trackEvent) {
+      window.top100Counter.trackEvent("click_apply_button", {
+        activity_id: activityId,
+        authorized: isAuthorized,
+      });
+      console.log(
+        '[Top100] Событие "click_apply_button" отправлено:',
+        activityId,
+        "| authorized:",
+        isAuthorized,
+      );
+    } else {
+      console.warn("[Top100] top100Counter не готов, событие не отправлено");
     }
+  });
 
-    LS.set("nouer_apps", apps().concat(activityId));
-    b.outerHTML = '<button class="btn" disabled>Заявка отправлена</button>';
+  // Отправляем кастомную цель "Подача заявки" в MyTracker
+  if (window._tmr) {
+    window._tmr.push({
+      id: 'ВАШ_COUNTER_ID',
+      type: 'reachGoal',
+      goal: 'apply_activity',
+      params: { activity_id: activityId, authorized: isAuthorized }
+    });
+    console.log('[MyTracker] Цель apply_activity отправлена:', activityId, '| authorized:', isAuthorized);
+  }
+
+  if (!isAuthorized) {
+    location.href = "login.html";
+    return;
+  }
+
+  LS.set("nouer_apps", apps().concat(activityId));
+  b.outerHTML = '<button class="btn" disabled>Заявка отправлена</button>';
 });
 function guard(form, fn) {
   form.addEventListener("submit", (e) => {
@@ -307,6 +328,18 @@ const pages = {
       u.push({ name: v.name.trim(), email, pass: v.pass });
       LS.set("nouer_users", u);
       LS.set("nouer_user", { name: v.name.trim(), email });
+
+      // Отправляем цель "Регистрация" в MyTracker
+      if (window._tmr) {
+        window._tmr.push({
+          id: "ВАШ_COUNTER_ID", // замените на ID вашего счётчика
+          type: "reachGoal",
+          goal: "mt_registration",
+          userid: email, // передаём email как идентификатор пользователя
+        });
+        console.log("[MyTracker] Цель mt_registration отправлена:", email);
+      }
+
       location.href = "index.html";
     });
   },
@@ -317,6 +350,18 @@ const pages = {
       );
       if (!u) return "Неверная почта или пароль.";
       LS.set("nouer_user", { name: u.name, email: u.email });
+
+      // Отправляем цель "Авторизация" в MyTracker
+      if (window._tmr) {
+        window._tmr.push({
+          id: "ВАШ_COUNTER_ID", // замените на ID вашего счётчика
+          type: "reachGoal",
+          goal: "mt_login",
+          userid: u.email,
+        });
+        console.log("[MyTracker] Цель mt_login отправлена:", u.email);
+      }
+
       location.href = "index.html";
     });
   },

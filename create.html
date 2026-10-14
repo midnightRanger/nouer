@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@1,400;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,500&family=Jost:wght@300;400;500&family=Pinyon+Script&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css"><title>Новая коллаборация — nouer</title></head>
+<body data-page="create">
+<header id="hd" class="top"></header>
+<main>
+<section class="narrow"><h1>Новая коллаборация</h1><p class="note">Публиковать могут только вошедшие пользователи.</p><form id="f" novalidate>
+<label>Название<input name="title" required maxlength="60"><small>Коротко и по делу, до 60 символов</small></label>
+<label>Тип<select name="type"><option value="walk">Прогулка</option><option value="collage">Коллаж</option><option value="music">Джем</option><option value="coffee">Кофе</option></select><small>От этого зависит значок и цвет карточки</small></label>
+<label>Дата<input name="date" type="date" required><small>Когда вы готовы встретиться</small></label>
+<label>Место<input name="place" required maxlength="60"><small>Город, адрес или название места</small></label>
+<label>Сколько участников нужно<input name="max" type="number" min="2" max="30" value="4" required><small>От 2 до 30 человек</small></label>
+<label>Описание<textarea name="desc" rows="4" required maxlength="300"></textarea><small>Что будем делать и что взять с собой, до 300 символов</small></label>
+<p class="err" role="alert"></p><button class="btn solid">Опубликовать</button></form></section>
+</main>
+<footer>nouer — nouer les liens, ensemble.</footer>
+<script src="script.js"></script>
+</body></html>

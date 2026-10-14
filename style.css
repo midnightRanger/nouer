@@ -115,3 +115,14 @@ h2::after{content:"";display:block;width:150px;height:7px;margin-top:.9rem;borde
 
 .counter{margin-top:.8rem;line-height:0}
 .counter img{filter:grayscale(1) sepia(.3) contrast(1.05);opacity:.85}
+
+.counters-row {
+    display: flex;
+    justify-content: flex-end; /* Выравнивание по правому краю */
+    align-items: center;
+    gap: 10px;
+}
+
+.counter {
+    /* При необходимости */
+}

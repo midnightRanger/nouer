@@ -126,7 +126,7 @@ function ticker() {
 function header() {
   const u = me();
   $("#hd").innerHTML =
-    `<a class="logo" href="index.html">nouer</a><nav><a href="index.html#list">Активности</a><a href="create.html">Создать</a>` +
+    `<a class="logo" href="index.html"><img class="logo-icon" src="img/favicon.png" alt="">nouer</a><nav><a href="index.html#list">Активности</a><a href="create.html">Создать</a>` +
     (u
       ? `<span>${esc(u.name)}</span><a href="#" id="out">Выйти</a>`
       : `<a href="login.html">Войти</a><a class="btn" href="register.html">Регистрация</a>`) +

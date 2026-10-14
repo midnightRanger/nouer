@@ -126,3 +126,21 @@ h2::after{content:"";display:block;width:150px;height:7px;margin-top:.9rem;borde
 .counter {
     /* При необходимости */
 }
+
+.logo{display:inline-flex;align-items:center;gap:.3em}
+.logo-icon{height:1em;width:auto;display:block}
+
+.knot .win{
+  opacity:0;
+  transform-box:fill-box;transform-origin:center;
+  filter:grayscale(1) sepia(.3) contrast(1.05);
+  animation:reveal 2s ease-out 4.4s forwards;
+}
+.knot .fan{animation:dim 2s ease 4.4s forwards}
+@keyframes reveal{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:scale(1)}}
+@keyframes dim{to{opacity:.3}}
+
+@media(prefers-reduced-motion:reduce){
+  .knot .win{opacity:1}
+  .knot .fan{opacity:.3}
+}

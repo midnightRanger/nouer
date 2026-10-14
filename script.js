@@ -156,36 +156,42 @@ document.addEventListener('click', e => {
     const link = e.target.closest('a[href^="collab.html?id="]');
     if (!link) return;
 
-    // Извлекаем ID активности из href
     const url = new URL(link.href, location.origin);
     const activityId = url.searchParams.get('id');
 
-    // Отправляем событие в Рамблер/Топ-100
-    if (window.top100Counter && window.top100Counter.trackEvent) {
-        window.top100Counter.trackEvent('view_activity', {
-            activity_id: activityId
-        });
-    }
+    // Добавляем в очередь — выполнится, когда top100Counter будет готов
+    (window._top100q = window._top100q || []).push(function() {
+        if (window.top100Counter && window.top100Counter.trackEvent) {
+            window.top100Counter.trackEvent('view_activity', {
+                activity_id: activityId
+            });
+        }
+    });
 });
 
 document.addEventListener("click", (e) => {
   const b = e.target.closest("[data-apply]");
   if (!b) return;
 
-  // Отправляем событие в Рамблер/Топ-100
-  if (window.top100Counter && window.top100Counter.trackEvent) {
-    window.top100Counter.trackEvent("click_apply_button", {
-      activity_id: b.dataset.apply,
-      authorized: !!me(), // авторизован ли пользователь
-    });
-  }
+  const activityId = b.dataset.apply;
+  const isAuthorized = !!me();
 
-  if (!me()) {
+  // Отправляем событие через очередь — выполнится, когда top100Counter будет готов
+  (window._top100q = window._top100q || []).push(function() {
+    if (window.top100Counter && window.top100Counter.trackEvent) {
+      window.top100Counter.trackEvent("click_apply_button", {
+        activity_id: activityId,
+        authorized: isAuthorized,
+      });
+    }
+  });
+
+  if (!isAuthorized) {
     location.href = "login.html";
     return;
   }
 
-  LS.set("nouer_apps", apps().concat(b.dataset.apply));
+  LS.set("nouer_apps", apps().concat(activityId));
   b.outerHTML = '<button class="btn" disabled>Заявка отправлена</button>';
 });
 function guard(form, fn) {

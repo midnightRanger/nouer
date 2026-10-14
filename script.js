@@ -207,7 +207,7 @@ document.addEventListener("click", (e) => {
   // Отправляем кастомную цель "Подача заявки" в MyTracker
   if (window._tmr) {
     window._tmr.push({
-      id: 'ВАШ_COUNTER_ID',
+      id: '3803700',
       type: 'reachGoal',
       goal: 'apply_activity',
       params: { activity_id: activityId, authorized: isAuthorized }
@@ -332,7 +332,7 @@ const pages = {
       // Отправляем цель "Регистрация" в MyTracker
       if (window._tmr) {
         window._tmr.push({
-          id: "ВАШ_COUNTER_ID", // замените на ID вашего счётчика
+          id: "3803700", 
           type: "reachGoal",
           goal: "mt_registration",
           userid: email, // передаём email как идентификатор пользователя
@@ -354,7 +354,7 @@ const pages = {
       // Отправляем цель "Авторизация" в MyTracker
       if (window._tmr) {
         window._tmr.push({
-          id: "ВАШ_COUNTER_ID", // замените на ID вашего счётчика
+          id: "3803700", 
           type: "reachGoal",
           goal: "mt_login",
           userid: u.email,
